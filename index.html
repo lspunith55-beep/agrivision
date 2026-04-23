@@ -1,0 +1,83 @@
+
+<link rel="stylesheet" href="style.css">
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>AgriVision</title>
+
+<link rel="stylesheet" href="style.css">
+<script src="data.js"></script>
+
+</head>
+
+<body>
+
+<div class="container">
+
+<!-- 🌐 LANGUAGE TOGGLE -->
+<div class="lang-toggle">
+<button onclick="setLang('en')">EN</button>
+<button onclick="setLang('kn')">ಕನ್ನಡ</button>
+</div>
+<img src="logo.png" class="logo">
+
+<h1 id="title">AgriVision Karnataka</h1>
+<small id="tag">Smart Farming • Smart Market • Smart Logistics</small>
+
+<br><br>
+
+<button onclick="go('farmer.html')" id="farmerBtn"></button>
+<button onclick="go('buyer.html')" id="buyerBtn"></button>
+<button onclick="go('logistics.html')" id="logisticsBtn"></button>
+<button onclick="go('features.html')">Upcoming features</button>
+
+<div class="card">
+
+<h3>🌾 About AgriVision Karnataka</h3>
+
+<p>
+AgriVision is a digital agritech platform designed to connect farmers, buyers, and logistics into a single ecosystem.
+</p>
+
+<p>
+It enables farmers to list crops, buyers to place bids, and provides a transparent system for price comparison and decision making.
+</p>
+
+<p>
+The platform aims to reduce middlemen dependency and improve farmer profitability using structured data and smart logic.
+</p>
+
+</div>
+
+<!-- 🚀 UPCOMING FEATURES -->
+<div style="margin-top:30px;padding:15px;background:white;border-radius:10px;">
+
+
+
+</div>
+<script>
+
+// NAVIGATION
+function go(page){
+window.location.href = page;
+}
+
+// LANGUAGE SYSTEM
+function setLang(lang){
+
+let t = LANG[lang];
+
+document.getElementById("farmerBtn").innerText = "👨‍🌾 " + t.farmer;
+document.getElementById("buyerBtn").innerText = "🛒 " + t.buyer;
+document.getElementById("logisticsBtn").innerText = "🚛 " + t.logistics;
+
+}
+
+// DEFAULT LANGUAGE
+setLang("en");
+
+</script>
+
+</body>
+</html>

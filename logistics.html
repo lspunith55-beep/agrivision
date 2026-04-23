@@ -1,0 +1,112 @@
+<link rel="stylesheet" href="style.css">
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Logistics</title>
+
+<link rel="stylesheet" href="style.css">
+<script src="data.js"></script>
+
+</head>
+
+<body>
+
+<div class="container">
+
+<div class="lang-toggle">
+<button onclick="setLang('en')">EN</button>
+<button onclick="setLang('kn')">ಕನ್ನಡ</button>
+</div>
+
+<img src="logo.png" class="logo">
+
+<h2 id="title">🚛 Logistics System</h2>
+
+<select id="vehicle">
+<option>Auto</option>
+<option>Tempo</option>
+<option>Truck</option>
+</select>
+
+<button onclick="calculate()">Calculate Delivery</button>
+
+<div id="out"></div>
+
+</div>
+
+<script>
+
+function calculate(){
+
+let crops = JSON.parse(localStorage.getItem("crops")) || [];
+
+if(crops.length === 0){
+out.innerHTML = "<p>No crops available</p>";
+return;
+}
+
+// TOTAL LOAD
+let totalKg = 0;
+let totalDistance = 0;
+
+crops.forEach(c=>{
+totalKg += Number(c.qty);
+totalDistance += Number(c.distance);
+});
+
+let avgDistance = Math.round(totalDistance / crops.length);
+
+// VEHICLE
+let v = document.getElementById("vehicle").value;
+let capacity = VEHICLE_CAPACITY[v];
+
+// FUEL CALCULATION
+let fuelCostPerKm = 5; // realistic estimation
+let totalFuelCost = avgDistance * fuelCostPerKm;
+
+// DRIVER COST
+let driverCost = avgDistance * 2;
+
+// TOTAL COST
+let totalCost = totalFuelCost + driverCost;
+
+// COST PER KG
+let costPerKg = (totalCost / totalKg).toFixed(2);
+
+// LOAD STATUS
+let loadStatus = totalKg > capacity ? "Overloaded ⚠️" : "Within Capacity ✅";
+
+// DISPLAY
+out.innerHTML = `
+<div class="card">
+
+<h3>📊 Logistics Analysis</h3>
+
+🚛 Vehicle: ${v}<br>
+📦 Total Load: ${totalKg} kg<br>
+📏 Avg Distance: ${avgDistance} km<br>
+📊 Capacity: ${capacity} kg<br>
+⚠️ Status: ${loadStatus}<br><br>
+
+⛽ Fuel Cost: ₹${totalFuelCost}<br>
+👨‍✈️ Driver Cost: ₹${driverCost}<br>
+💰 Total Cost: ₹${totalCost}<br><br>
+
+📦 Cost per kg: ₹${costPerKg}
+
+</div>
+`;
+
+}
+
+// LANGUAGE
+function setLang(lang){
+let t = LANG[lang];
+document.getElementById("title").innerText = "🚛 " + t.logistics;
+}
+
+</script>
+
+</body>
+</html>

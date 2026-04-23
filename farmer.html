@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Farmer</title>
+
+<link rel="stylesheet" href="style.css">
+<script src="data.js"></script>
+
+<style>
+body {
+  font-family: Arial;
+}
+input, select {
+  width: 90%;
+  padding: 8px;
+  margin: 5px;
+}
+button {
+  width: 95%;
+  padding: 10px;
+  margin: 5px;
+  background: #4CAF50;
+  color: white;
+  border: none;
+  border-radius: 6px;
+}
+</style>
+
+</head>
+
+<body>
+
+<div class="container">
+
+<h2>👨‍🌾 Farmer Portal</h2>
+
+<!-- AUTH -->
+<div id="auth">
+
+<h3>Login</h3>
+<input id="loginName" placeholder="Name">
+<input id="loginPass" type="password" placeholder="Password">
+<button onclick="login()">Login</button>
+
+<h3>Register</h3>
+
+<input id="name" placeholder="Name">
+<select id="district"></select>
+
+<input id="distance" type="number" placeholder="Distance (km)">
+<input id="age" type="number" placeholder="Age">
+<input id="exp" type="number" placeholder="Experience (years)">
+<input id="cropsYear" type="number" placeholder="Crops per year">
+
+<input id="password" type="password" placeholder="Password">
+
+<button onclick="register()">Register</button>
+
+</div>
+
+<!-- MAIN -->
+<div id="main" style="display:none;">
+
+<button onclick="logout()">Logout</button>
+
+<h3>Add Crop</h3>
+
+<select id="crop"></select>
+
+<select id="quality">
+<option>Good</option>
+<option>Average</option>
+<option>Poor</option>
+</select>
+
+<input id="qty" placeholder="Quantity (kg)">
+<input id="days" placeholder="Fresh days left">
+<input id="price" placeholder="Your price (optional)">
+
+<label>Emergency</label>
+<input type="checkbox" id="emergency">
+
+<button onclick="addCrop()">Add Crop</button>
+<button onclick="goDash()">Dashboard</button>
+
+<div id="out"></div>
+
+</div>
+
+</div>
+
+<script>
+
+// -------------------- LOAD DISTRICTS --------------------
+
+let districtList = typeof DISTRICTS !== "undefined" ? DISTRICTS : [
+"Bangalore","Mysore","Kolar","Belgaum","Tumkur","Chitradurga"
+];
+
+districtList.forEach(d=>{
+document.getElementById("district").innerHTML += `<option>${d}</option>`;
+});
+
+// -------------------- LOAD CROPS --------------------
+
+let cropList = typeof CROPS !== "undefined" ? CROPS : [
+"Tomato","Onion","Potato","Rice","Wheat","Maize","Ragi","Carrot"
+];
+
+cropList.forEach(c=>{
+document.getElementById("crop").innerHTML += `<option>${c}</option>`;
+});
+
+// -------------------- REGISTER --------------------
+
+function register(){
+
+let farmers = JSON.parse(localStorage.getItem("farmers")) || [];
+
+let n = document.getElementById("name").value.trim();
+let p = document.getElementById("password").value.trim();
+let d = document.getElementById("distance").value.trim();
+let a = document.getElementById("age").value.trim();
+let e = document.getElementById("exp").value.trim();
+let c = document.getElementById("cropsYear").value.trim();
+let dist = document.getElementById("district").value;
+
+if(n===""||p===""||d===""||a===""||e===""||c===""){
+alert("Fill all fields");
+return;
+}
+
+if(farmers.find(f=>f.name===n)){
+alert("User already exists");
+return;
+}
+
+let user = {
+name:n,
+password:p,
+district:dist,
+distance:Number(d),
+age:Number(a),
+experience:Number(e),
+cropsPerYear:Number(c)
+};
+
+farmers.push(user);
+localStorage.setItem("farmers",JSON.stringify(farmers));
+
+alert("Registered successfully");
+
+}
+
+// -------------------- LOGIN --------------------
+
+function login(){
+
+let farmers = JSON.parse(localStorage.getItem("farmers")) || [];
+
+let n = document.getElementById("loginName").value.trim();
+let p = document.getElementById("loginPass").value.trim();
+
+if(n===""||p===""){
+alert("Enter credentials");
+return;
+}
+
+let user = farmers.find(f=>f.name===n && f.password===p);
+
+if(!user){
+alert("Invalid login");
+return;
+}
+
+localStorage.setItem("currentFarmer",JSON.stringify(user));
+
+document.getElementById("auth").style.display="none";
+document.getElementById("main").style.display="block";
+loadcrops();
+}
+
+// -------------------- LOGOUT --------------------
+
+function logout(){
+localStorage.removeItem("currentFarmer");
+location.reload();
+}
+
+// -------------------- ADD CROP --------------------
+
+function addCrop(){
+
+let farmer = JSON.parse(localStorage.getItem("currentFarmer"));
+
+if(!farmer){
+alert("Login required");
+return;
+}
+
+let crop = document.getElementById("crop").value;
+let quality = document.getElementById("quality").value;
+let qty = document.getElementById("qty").value.trim();
+let days = document.getElementById("days").value.trim();
+
+if(qty.trim() === "" || days.trim() === ""){
+alert("Fill crop details");
+return;
+}
+// simple pricing logic
+let basePrice = 20;
+
+if(quality==="Good") basePrice += 10;
+if(quality==="Average") basePrice += 5;
+if(quality==="Poor") basePrice -= 5;
+
+let finalPrice = document.getElementById("price").value
+? Number(document.getElementById("price").value)
+: basePrice;
+
+if(document.getElementById("emergency").checked){
+finalPrice = Math.round(finalPrice * 0.8);
+}
+
+let list = JSON.parse(localStorage.getItem("crops")) || [];
+
+list.push({
+crop,
+quality,
+qty,
+price:finalPrice,
+days,
+district:farmer.district,
+distance:farmer.distance,
+farmer:farmer.name
+});
+
+localStorage.setItem("crops",JSON.stringify(list));
+let qualityClass =
+quality === "Good" ? "good" :
+quality === "Average" ? "avg" : "poor";
+
+document.getElementById("out").innerHTML += `
+<div class="card">
+🌾 ${crop} 
+<span class="${qualityClass}">(${quality})</span><br>
+📦 ${qty} kg<br>
+💰 ₹${finalPrice}/kg
+</div>
+`;
+
+}
+
+// -------------------- DASHBOARD --------------------
+
+function goDash(){
+window.location.href="farmer-dashboard.html";
+}
+function loadCrops(){
+
+let crops = JSON.parse(localStorage.getItem("crops")) || [];
+let farmer = JSON.parse(localStorage.getItem("currentFarmer"));
+
+if(!farmer) return;
+
+let my = crops.filter(c=>c.farmer===farmer.name);
+
+document.getElementById("out").innerHTML = "";
+
+my.forEach(c=>{
+let qualityClass =
+c.quality === "Good" ? "good" :
+c.quality === "Average" ? "avg" : "poor";
+
+document.getElementById("out").innerHTML += `
+<div class="card">
+🌾 ${c.crop} 
+<span class="${qualityClass}">(${c.quality})</span><br>
+📦 ${c.qty} kg<br>
+💰 ₹${c.price}/kg
+</div>
+`;
+});
+
+}
+
+</script>
+
+</body>
+</html>

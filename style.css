@@ -1,0 +1,147 @@
+/* 🌾 BACKGROUND (RICE FIELD THEME) */
+/* 🌾 FULL BACKGROUND */
+body {
+  margin: 0;
+  font-family: 'Segoe UI', sans-serif;
+
+  background: url('https://images.unsplash.com/photo-1500382017468-9049fed747ef') no-repeat center center fixed;
+  background-size: cover;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+}
+
+/* 🌟 GLASS CARD */
+.container {
+  width: 90%;
+  max-width: 420px;
+
+  padding: 25px;
+  border-radius: 20px;
+
+  background: rgba(255, 255, 255, 0.25);
+  backdrop-filter: blur(12px);
+
+  box-shadow: 0 10px 30px rgba(0,0,0,0.25);
+
+  text-align: center;
+}
+
+/* 🌟 LOGO */
+.logo {
+  width: 120px;
+  margin-bottom: 10px;
+}
+
+/* 🏷 TITLE */
+h1 {
+  margin: 10px 0;
+  color: #1b5e20;
+}
+
+small {
+  color: #333;
+}
+
+/* 🌐 LANGUAGE */
+.lang-toggle {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+}
+
+.lang-toggle button {
+  padding: 6px 10px;
+  margin-left: 5px;
+  border-radius: 20px;
+  border: none;
+  background: #2e7d32;
+  color: white;
+  cursor: pointer;
+}
+
+/* 🔘 BUTTONS */
+button {
+  width: 100%;
+  padding: 14px;
+  margin-top: 12px;
+
+  border: none;
+  border-radius: 14px;
+
+  background: linear-gradient(45deg, #66bb6a, #2e7d32);
+  color: white;
+
+  font-weight: bold;
+  font-size: 16px;
+
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+button:hover {
+  transform: scale(1.05);
+}
+
+/* 📦 CARDS */
+.card {
+  background: rgba(255,255,255,0.7);
+  padding: 12px;
+  border-radius: 12px;
+  margin-top: 10px;
+}
+
+/* ⚠️ EMERGENCY */
+.emergency {
+  border-left: 5px solid orange;
+}
+
+/* 🖼 QUALITY */
+.imgSel {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 10px;
+}
+
+.imgSel img {
+  width: 70px;
+  border-radius: 10px;
+  cursor: pointer;
+  border: 2px solid transparent;
+}
+
+.imgSel img.active {
+  border: 3px solid #2e7d32;
+}
+
+/* 📱 MOBILE */
+@media (max-width: 600px) {
+  .container {
+    width: 95%;
+  }
+}
+
+
+
+.container {
+  max-width: 400px;
+  margin: auto;
+  padding: 20px;
+  background: rgba(255,255,255,0.9);
+  border-radius: 15px;
+  box-shadow: 0 0 15px rgba(0,0,0,0.2);
+}
+
+.card {
+  background: #fff;
+  padding: 10px;
+  margin-top: 10px;
+  border-radius: 10px;
+  box-shadow: 0 0 5px rgba(0,0,0,0.1);
+}
+
+.good { color: green; font-weight: bold; }
+.avg { color: orange; font-weight: bold; }
+.poor { color: red; font-weight: bold; }

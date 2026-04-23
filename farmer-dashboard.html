@@ -1,0 +1,108 @@
+<link rel="stylesheet" href="style.css">
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Farmer Dashboard</title>
+
+<link rel="stylesheet" href="style.css">
+
+</head>
+
+<body>
+
+<div class="container">
+
+<img src="logo.png" class="logo">
+
+<h2>📊 Farmer Dashboard</h2>
+
+<div id="out"></div>
+
+<button onclick="back()">⬅ Back</button>
+
+</div>
+
+<script>
+
+function load(){
+
+let crops = JSON.parse(localStorage.getItem("crops")) || [];
+let bids = JSON.parse(localStorage.getItem("bids")) || [];
+let farmer = JSON.parse(localStorage.getItem("currentFarmer"));
+
+if(!farmer){
+out.innerHTML = "<p>Login required</p>";
+return;
+}
+
+let myCrops = crops.filter(c => c.farmer === farmer.name);
+
+if(myCrops.length === 0){
+out.innerHTML = "<p>No crops added yet</p>";
+return;
+}
+
+out.innerHTML = "";
+
+myCrops.forEach(c => {
+
+let myBids = bids.filter(b => b.crop === c.crop && b.farmer === c.farmer);
+
+// FIND BEST BID
+let best = null;
+
+myBids.forEach(b=>{
+if(!best || b.total > best.total){
+best = b;
+}
+});
+
+// PROFIT ESTIMATION
+let estimatedProfit = (c.price - 3) * c.qty;
+
+// DISPLAY
+out.innerHTML += `
+<div class="card">
+
+<h3>🌾 ${c.crop} (${c.quality})</h3>
+
+📦 Quantity: ${c.qty} kg<br>
+💰 Price: ₹${c.price}/kg<br>
+📍 District: ${c.district}<br><br>
+
+💸 Estimated Profit: ₹${estimatedProfit}<br><br>
+
+<h4>📥 Bids:</h4>
+
+${
+myBids.length === 0
+? "No bids yet"
+: myBids.map(b => `
+<div style="margin-top:5px;">
+Buyer wants ${b.qty} kg → ₹${b.total}
+</div>
+`).join("")
+}
+
+<br>
+
+${best ? `<h4>🏆 Best Bid: ₹${best.total}</h4>` : ""}
+
+</div>
+`;
+
+});
+
+}
+
+function back(){
+window.location.href = "farmer.html";
+}
+
+load();
+
+</script>
+
+</body>
+</html>

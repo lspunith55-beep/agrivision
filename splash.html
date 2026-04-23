@@ -1,0 +1,56 @@
+<link rel="stylesheet" href="style.css">
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>AgriVision</title>
+
+<link rel="stylesheet" href="style.css">
+
+<style>
+
+/* FULL SCREEN CENTER */
+body {
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  height:100vh;
+  overflow:hidden;
+}
+
+/* LOGO */
+.logo-splash {
+  max-width:85vw;
+  max-height:85vh;
+  animation: fadeZoom 2s ease-in-out;
+}
+
+/* ANIMATION */
+@keyframes fadeZoom {
+  0% {
+    opacity:0;
+    transform: scale(0.8);
+  }
+  100% {
+    opacity:1;
+    transform: scale(1);
+  }
+}
+
+</style>
+
+</head>
+
+<body>
+
+<img src="logo.png" class="logo-splash">
+
+<script>
+// redirect after animation
+setTimeout(()=>{
+  window.location.href="index.html";
+},2500);
+</script>
+
+</body>
+</html>

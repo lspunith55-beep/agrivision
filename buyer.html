@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Buyer</title>
+
+<link rel="stylesheet" href="style.css">
+
+</head>
+
+<body>
+
+<div class="container">
+
+<h2>🛒 Buyer Portal</h2>
+
+<div id="out"></div>
+
+</div>
+
+<script>
+
+function loadCrops(){
+
+let crops = JSON.parse(localStorage.getItem("crops")) || [];
+
+if(crops.length === 0){
+document.getElementById("out").innerHTML = "No crops available";
+return;
+}
+
+document.getElementById("out").innerHTML = "";
+
+crops.forEach((c, index)=>{
+
+let qualityClass =
+c.quality === "Good" ? "good" :
+c.quality === "Average" ? "avg" : "poor";
+
+document.getElementById("out").innerHTML += `
+<div class="card">
+
+🌾 ${c.crop} 
+<span class="${qualityClass}">(${c.quality})</span><br>
+
+📦 ${c.qty} kg<br>
+💰 ₹${c.price}/kg<br>
+📍 ${c.district}<br><br>
+
+<input id="qty${index}" placeholder="Enter quantity"><br>
+
+<button onclick="buy(${index})">Place Bid</button>
+
+</div>
+`;
+
+});
+
+}
+
+function buy(i){
+
+let crops = JSON.parse(localStorage.getItem("crops")) || [];
+let bids = JSON.parse(localStorage.getItem("bids")) || [];
+
+let qty = document.getElementById("qty"+i).value;
+
+if(qty === ""){
+alert("Enter quantity");
+return;
+}
+
+let crop = crops[i];
+
+let total = qty * crop.price;
+
+bids.push({
+crop: crop.crop,
+farmer: crop.farmer,
+qty: qty,
+price: crop.price,
+total: total
+});
+
+localStorage.setItem("bids", JSON.stringify(bids));
+
+alert("Bid placed successfully");
+
+}
+
+loadCrops();
+
+</script>
+
+</body>
+</html>
